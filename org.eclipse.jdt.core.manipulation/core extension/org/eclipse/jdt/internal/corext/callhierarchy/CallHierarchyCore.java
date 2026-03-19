@@ -297,7 +297,7 @@ public class CallHierarchyCore {
     static CompilationUnit getCompilationUnitNode(IMember member, boolean resolveBindings) {
         ITypeRoot typeRoot= member.getTypeRoot();
         try {
-            if (typeRoot.exists() && typeRoot.getBuffer() != null) {
+            if (typeRoot != null && typeRoot.exists() && typeRoot.getBuffer() != null) {
 				ASTParser parser= ASTParser.newParser(IASTSharedValues.SHARED_AST_LEVEL);
 				parser.setSource(typeRoot);
 				parser.setResolveBindings(resolveBindings);
@@ -305,6 +305,10 @@ public class CallHierarchyCore {
 	        }
         } catch (JavaModelException e) {
             JavaManipulationPlugin.log(e);
+        } catch (ClassCastException e) {
+            // Non-standard ITypeRoot (e.g. from a contributed search participant)
+            // that does not implement the internal compiler interfaces required
+            // by ASTParser — fall through and return null
         }
         return null;
     }

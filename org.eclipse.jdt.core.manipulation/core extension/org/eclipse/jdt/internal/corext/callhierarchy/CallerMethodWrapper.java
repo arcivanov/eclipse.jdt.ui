@@ -36,7 +36,6 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.search.IJavaSearchConstants;
 import org.eclipse.jdt.core.search.IJavaSearchScope;
 import org.eclipse.jdt.core.search.SearchEngine;
-import org.eclipse.jdt.core.search.SearchParticipant;
 import org.eclipse.jdt.core.search.SearchPattern;
 
 import org.eclipse.jdt.internal.core.manipulation.JavaManipulationPlugin;
@@ -152,7 +151,7 @@ public class CallerMethodWrapper extends MethodWrapper {
 			IJavaSearchScope defaultSearchScope= getSearchScope();
 			boolean isWorkspaceScope= SearchEngine.createWorkspaceScope().equals(defaultSearchScope);
 			IJavaSearchScope searchScope= isWorkspaceScope ? getAccurateSearchScope(defaultSearchScope, member) : defaultSearchScope;
-			searchEngine.search(pattern, new SearchParticipant[] { SearchEngine.getDefaultSearchParticipant() }, searchScope, searchRequestor,
+			searchEngine.search(pattern, SearchEngine.getSearchParticipants(), searchScope, searchRequestor,
 					monitor);
 			return searchRequestor.getCallers();
 
